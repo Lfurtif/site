@@ -1,29 +1,29 @@
 const GITHUB_USERNAME = 'lfurtif';
-document.getElementById('github-calendar').src = `https://rshah.org{GITHUB_USERNAME}`;
 
+// 1. Fixed the Calendar URL
+document.getElementById('github-calendar').src = `https://ghchart.rshah.org/${GITHUB_USERNAME}`;
 
 async function fetchGitHubRepos() {
     try {
-
-        const response = await fetch(`https://github.com{GITHUB_USERNAME}/repos?sort=updated&per_page=6`);
+        // 2. Switched to API endpoint and fixed template literal
+        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`);
         if (!response.ok) {
-            console.error("Erreur API GitHub Status:", response.status);
+            console.error("API error:", response.status);
             return;
         }
         const repos = await response.json();
         render3DCarousel(repos);
     } catch (error) {
-        console.error("Impossible de joindre l'API GitHub :", error);
+        console.error("Fetch failed:", error);
     }
 }
-
-
 
 function render3DCarousel(repos) {
     const carousel = document.getElementById('carousel');
     if (!carousel || repos.length === 0) return;
 
     const totalItems = repos.length;
+    // Use Math.PI correctly
     const radius = Math.round(150 / Math.tan(Math.PI / totalItems)); 
     let currentIndex = 0;
 
@@ -36,9 +36,9 @@ function render3DCarousel(repos) {
         card.innerHTML = `
             <div>
                 <h4>${repo.name}</h4>
-                <p>${repo.description || 'Aucune description.'}</p>
+                <p>${repo.description || 'No description.'}</p>
             </div>
-            <a href="${repo.html_url}" target="_blank" class="repo-link">Voir →</a>
+            <a href="${repo.html_url}" target="_blank" class="repo-link">View →</a>
         `;
         carousel.appendChild(card);
     });
@@ -50,4 +50,3 @@ function render3DCarousel(repos) {
 }
 
 fetchGitHubRepos();
-
