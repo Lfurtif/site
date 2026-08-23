@@ -15,11 +15,9 @@ body {
     width: 90%;
     max-width: 1100px;
     grid-template-columns: 350px 1fr;
-    grid-template-rows: auto auto;
     grid-template-areas: 
         "profile repos"
         "socials repos";
-    position: relative;
     z-index: 2;
 }
 
@@ -35,6 +33,19 @@ body {
 .repo-carousel { grid-area: repos; display: flex; flex-direction: column; }
 .socials { grid-area: socials; }
 
+.profile-head {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-head img {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 100px;
+    height: 100px;
+}
+
 .calendar-container img {
     width: 100%;
     filter: invert(0.9) hue-rotate(180deg);
@@ -48,6 +59,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 200px;
+    overflow: hidden;
 }
 
 .carousel-3d {
