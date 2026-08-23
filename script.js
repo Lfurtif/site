@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML = repos.map(repo => `
                 <a href="${repo.html_url}" target="_blank" class="repo-item">
                     <h4>${repo.name}</h4>
-                    <p>${repo.description ? repo.description.substring(0, 60) + '...' : 'Pas de description.'}</p>
+                    <p>${repo.description ? repo.description.substring(0, 60) + '...' : 'No description.'}</p>
                 </a>
             `).join('');
         })
