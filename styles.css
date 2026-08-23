@@ -16,16 +16,16 @@ body {
     padding: 30px; box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05);
 }
 
-/* Fix Calendrier */
+
 .calendar-container { width: 100%; overflow-x: auto; }
 .calendar-container img { width: 100%; filter: invert(0.9) hue-rotate(180deg); }
 
-/* Layout Carousel */
+
 .repo-carousel { grid-column: 2 / 3; }
 .repo-layout { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .carousel-3d-container { height: 150px; perspective: 1000px; flex: 1; display: flex; justify-content: center; align-items: center; }
 .carousel-3d { position: relative; width: 180px; height: 120px; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
 .repo-card-3d { position: absolute; width: 180px; height: 120px; background: rgba(20, 20, 20, 0.9); border: 1px solid rgba(143, 254, 9, 0.4); border-radius: 12px; padding: 12px; backface-visibility: hidden; }
 
-/* Blob Canvas */
+
 #blob-canvas { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; background: #050505; }
