@@ -1,10 +1,10 @@
 const GITHUB_USERNAME = 'lfurtif';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Calendrier
+    
     document.getElementById('github-calendar').src = `https://ghchart.rshah.org/${GITHUB_USERNAME}`;
 
-    // 2. Fetch Repos
+    
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`)
         .then(res => res.json())
         .then(repos => render3DCarousel(repos))
