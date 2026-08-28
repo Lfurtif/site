@@ -1,8 +1,8 @@
 const canvas = document.getElementById('blob-canvas');
 let width, height;
 const gl = canvas.getContext('webgl');
-const NUM_BLOBS = 30; const BLOB_SPEED = 0.5; const STICKINESS = 0.3;
-const COLOR1 = [0.68, 1.0, 0.18]; const COLOR2 = [0.68, 1.0, 0.18]; const BG_COLOR = [0.02, 0.02, 0.02]; 
+const NUM_BLOBS = 30, BLOB_SPEED = 0.5, STICKINESS = 0.3;
+const COLOR1 = [0.68, 1.0, 0.18], COLOR2 = [0.68, 1.0, 0.18], BG_COLOR = [0.02, 0.02, 0.02]; 
 let blobs, blobsHandle, color1Handle, color2Handle, bgColorHandle, heightHandle, program;
 
 function resize() {
