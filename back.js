@@ -1,7 +1,7 @@
 const canvas = document.getElementById('blob-canvas');
 let width, height;
 const gl = canvas.getContext('webgl');
-const NUM_BLOBS = 30, BLOB_SPEED = 0.5, STICKINESS = 0.3;
+const NUM_BLOBS = 40, BLOB_SPEED = 0.7, STICKINESS = 0.7;
 const COLOR1 = [0.68, 1.0, 0.18], COLOR2 = [0.68, 1.0, 0.18], BG_COLOR = [0.02, 0.02, 0.02]; 
 let blobs, blobsHandle, color1Handle, color2Handle, bgColorHandle, heightHandle, program;
 
