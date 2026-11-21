@@ -46,8 +46,27 @@ body {
 }
 .profile-head h2 { margin: 0 0 4px 0; font-size: 1.4rem; }
 .profile-head p { margin: 0; font-size: 0.9rem; color: rgba(255, 240, 219, 0.65); }
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 0;
+    padding: 6px 12px;
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 999px;
+    background: rgba(167, 139, 250, 0.07);
+    font-size: 0.8rem;
+    color: #d6c6ff;
+}
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #a78bfa;
+    box-shadow: 0 0 8px rgba(167, 139, 250, 0.8);
+}
 .goal {
-    margin: 20px 0 0;
+    margin: 12px 0 0;
     padding: 10px 14px;
     border-left: 2px solid rgba(167, 139, 250, 0.6);
     background: rgba(167, 139, 250, 0.06);
