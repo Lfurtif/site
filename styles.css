@@ -1,9 +1,7 @@
-html { background: #050505; }
-
 body {
     margin: 0;
-    background: transparent;
-    color: #f4f0ff;
+    background: #050505;
+    color: #fff0db;
     font-family: sans-serif;
     min-height: 100vh;
     display: flex;
@@ -12,8 +10,6 @@ body {
 }
 
 .grid {
-    position: relative;
-    z-index: 1;
     display: grid;
     gap: 20px;
     width: 90%;
@@ -22,12 +18,13 @@ body {
     grid-template-areas: 
         "profile repos" 
         "socials repos";
+    z-index: 2;
 }
 
 .card {
-    background: rgba(15, 12, 24, 0.55);
+    background: rgba(15, 15, 15, 0.45);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(167, 139, 250, 0.25);
+    border: 1px solid rgba(167, 139, 250, 0.2);
     border-radius: 20px;
     padding: 25px;
 }
@@ -49,11 +46,9 @@ body {
     height: 100px;
 }
 
-.calendar-container { overflow-x: auto; }
 .calendar-container img {
     width: 100%;
-    min-width: 600px;
-    filter: invert(.9) hue-rotate(270deg) saturate(1.2);
+    filter: invert(0.9) hue-rotate(270deg);
     margin-top: 15px;
 }
 
@@ -65,17 +60,17 @@ body {
 }
 
 .repo-item {
-    background: rgba(167, 139, 250, 0.04);
+    background: rgba(255, 255, 255, 0.03);
     padding: 15px;
     border-radius: 12px;
-    border: 1px solid rgba(167, 139, 250, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     text-decoration: none;
     transition: 0.3s;
 }
 
 .repo-item:hover {
-    background: rgba(167, 139, 250, 0.09);
-    border-color: rgba(167, 139, 250, 0.45);
+    background: rgba(167, 139, 250, 0.05);
+    border-color: rgba(167, 139, 250, 0.4);
     transform: translateY(-2px);
 }
 
@@ -87,7 +82,7 @@ body {
 
 .repo-item p {
     font-size: 0.85rem;
-    color: rgba(244, 240, 255, 0.6);
+    color: rgba(255, 240, 219, 0.6);
     margin: 0;
 }
 
@@ -105,20 +100,57 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
+}body { margin: 0; background: #050505; color: #fff0db; font-family: sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+
+.grid { display: grid; gap: 20px; width: 90%; max-width: 1100px; grid-template-columns: 350px 1fr; grid-template-areas: "profile repos" "socials repos"; z-index: 2; }
+
+.card { background: rgba(15, 15, 15, 0.45); backdrop-filter: blur(10px); border: 1px solid rgba(167, 139, 250, 0.2); border-radius: 20px; padding: 25px; }
+
+.profile { grid-area: profile; }
+.repo-carousel { grid-area: repos; }
+.socials { grid-area: socials; }
+
+.profile-head { display: flex; align-items: center; gap: 15px; }
+.profile-head img { border-radius: 50%; object-fit: cover; width: 100px; height: 100px; }
+
+.calendar-container img { width: 100%; filter: invert(0.9) hue-rotate(270deg); margin-top: 15px; }
+
+.repo-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 15px; 
+    margin-top: 20px; 
 }
 
-/* Phone: one column, no fixed 350px track, and the top stays reachable. */
-@media (max-width: 760px) {
-    body { align-items: flex-start; padding: 20px 0; }
-    .grid {
-        width: calc(100% - 32px);
-        grid-template-columns: 1fr;
-        grid-template-areas: "profile" "repos" "socials";
-        gap: 16px;
-    }
-    .card { padding: 20px; border-radius: 16px; }
-    .repo-grid { grid-template-columns: 1fr; }
-    .profile-head img { width: 80px; height: 80px; }
+.repo-item { 
+    background: rgba(255, 255, 255, 0.03); 
+    padding: 15px; 
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    text-decoration: none; 
+    transition: 0.3s; 
 }
+
+.repo-item:hover { 
+    background: rgba(167, 139, 250, 0.05); 
+    border-color: rgba(167, 139, 250, 0.4); 
+    transform: translateY(-2px); 
+}
+
+.repo-item h4 { 
+    margin: 0 0 8px 0; 
+    color: #d6c6ff; 
+    font-size: 1rem;
+}
+
+.repo-item p { 
+    font-size: 0.85rem; 
+    color: rgba(255, 240, 219, 0.6); 
+    margin: 0; 
+}
+
+#blob-canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
+.social-links { display: flex; gap: 20px; margin-top: 20px; }
+.social-icon img { height: 32px; }
