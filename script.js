@@ -1,8 +1,8 @@
-/* GitHub repos, carousel controls. No innerHTML with remote content. */
+/* GitHub repos + two horizontal scrollers. No innerHTML with remote content. */
 (() => {
   const USER = 'lfurtif';
   const API = `https://api.github.com/users/${USER}`;
-  const CACHE_KEY = 'lfurtif-site-v4';
+  const CACHE_KEY = 'lfurtif-site-v5';
   const CACHE_MS = 10 * 60 * 1000;
 
   const LANG_COLORS = {
@@ -57,7 +57,7 @@
     if (repo.language) {
       const lang = make('span', 'lang');
       const dot = make('i', 'lang-dot');
-      dot.style.background = LANG_COLORS[repo.language] || '#7a8296';
+      dot.style.background = LANG_COLORS[repo.language] || '#7d8599';
       lang.append(dot, document.createTextNode(repo.language));
       meta.append(lang);
     }
@@ -73,11 +73,10 @@
     track.replaceChildren();
     if (!Array.isArray(repos) || repos.length === 0) {
       track.append(make('p', 'repo-error', 'No public projects yet'));
-      updateControls();
-      return;
+    } else {
+      for (const repo of repos.slice(0, 6)) track.append(repoCard(repo));
     }
-    for (const repo of repos.slice(0, 6)) track.append(repoCard(repo));
-    updateControls();
+    refresh('repos');
   }
 
   function renderError(message) {
@@ -90,37 +89,79 @@
     retry.addEventListener('click', load);
     box.append(retry);
     track.append(box);
-    updateControls();
+    refresh('repos');
   }
 
-  function step() {
-    const track = $('#repo-list');
-    const card = track && track.querySelector('.repo-card, .skeleton-card');
-    if (!card) return 280;
-    const gap = parseFloat(getComputedStyle(track).gap) || 16;
-    return card.getBoundingClientRect().width + gap;
+  /* --- Scroller wiring (arrows, progress, keyboard, drag) --- */
+  const SCROLLERS = {
+    repos: { track: '#repo-list', prev: '#prev-projects', next: '#next-projects', progress: '#repo-progress' },
+    activity: { track: '#calendar-body', prev: '#prev-activity', next: '#next-activity', progress: '#cal-progress' },
+  };
+  const state = {};
+
+  function elements(key) {
+    const s = SCROLLERS[key];
+    return {
+      track: $(s.track), prev: $(s.prev), next: $(s.next), progress: $(s.progress),
+    };
   }
 
-  function updateControls() {
-    const track = $('#repo-list');
-    const prev = $('#prev-projects');
-    const next = $('#next-projects');
-    if (!track || !prev || !next) return;
-    const max = Math.max(0, track.scrollWidth - track.clientWidth - 2);
-    prev.disabled = track.scrollLeft <= 2;
-    next.disabled = track.scrollLeft >= max;
+  function refresh(key) {
+    const { track, prev, next, progress } = elements(key);
+    if (!track) return;
+    const max = Math.max(0, track.scrollWidth - track.clientWidth);
+    const x = track.scrollLeft;
+    if (prev) prev.disabled = x <= 2;
+    if (next) next.disabled = x >= max - 2;
+    if (progress) {
+      const ratio = track.clientWidth / Math.max(1, track.scrollWidth);
+      const pct = Math.min(100, Math.max(12, ratio * 100));
+      const maxShift = (100 - pct) / pct * 100; // translateX % is relative to the thumb's own width
+      progress.style.width = `${pct}%`;
+      progress.style.transform = `translateX(${(x / Math.max(1, max)) * maxShift}%)`;
+    }
   }
 
-  function setupCarousel() {
-    const track = $('#repo-list');
-    const prev = $('#prev-projects');
-    const next = $('#next-projects');
-    if (!track || !prev || !next) return;
-    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
-    track.addEventListener('scroll', updateControls, { passive: true });
-    addEventListener('resize', updateControls, { passive: true });
-    updateControls();
+  function scrollByPage(track, dir) {
+    const first = track.querySelector('.repo-card, .skeleton-card');
+    const amount = first
+      ? first.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).gap) || 16)
+      : track.clientWidth * 0.85;
+    track.scrollBy({ left: dir * amount, behavior: 'smooth' });
+  }
+
+  function enableDrag(track, key) {
+    let down = false, startX = 0, startScroll = 0, moved = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      down = true; moved = false;
+      startX = e.clientX; startScroll = track.scrollLeft;
+      track.classList.add('dragging');
+    });
+    track.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 3) moved = true;
+      track.scrollLeft = startScroll - dx;
+    });
+    const end = () => { if (!down) return; down = false; track.classList.remove('dragging'); };
+    track.addEventListener('pointerup', end);
+    track.addEventListener('pointercancel', end);
+    track.addEventListener('pointerleave', end);
+    // Prevent the native image drag from fighting the pointer drag.
+    track.addEventListener('dragstart', (e) => e.preventDefault());
+    track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+    state[key] = track;
+  }
+
+  function setupScroller(key) {
+    const { track, prev, next } = elements(key);
+    if (!track) return;
+    if (prev) prev.addEventListener('click', () => scrollByPage(track, -1));
+    if (next) next.addEventListener('click', () => scrollByPage(track, 1));
+    track.addEventListener('scroll', () => refresh(key), { passive: true });
+    if (key === 'activity') enableDrag(track, key);
+    refresh(key);
   }
 
   async function load() {
@@ -148,7 +189,9 @@
   }
 
   $('#year').textContent = new Date().getFullYear();
-  setupCarousel();
+  setupScroller('repos');
+  setupScroller('activity');
+  addEventListener('resize', () => { refresh('repos'); refresh('activity'); }, { passive: true });
   setupCalendar();
   load();
 })();

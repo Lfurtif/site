@@ -13,6 +13,7 @@
 </head>
 <body>
   <canvas id="lava-canvas" aria-hidden="true"></canvas>
+  <div class="glass-layer" aria-hidden="true"></div>
   <div class="lava-fallback" aria-hidden="true"></div>
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -35,7 +36,7 @@
         <p class="lede">Red team · Development · Networks · Electronics<br>Pentesting, tooling, systems and hardware.</p>
       </div>
 
-      <aside class="profile" id="about">
+      <aside class="profile glass" id="about">
         <div class="profile-head">
           <img class="avatar" src="ressources/lfurtif.jpg" alt="Portrait of Lfurtif" width="64" height="64">
           <div>
@@ -55,34 +56,41 @@
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="section-head">
         <h2 id="projects-title">Projects</h2>
-        <div class="carousel-controls">
-          <button class="carousel-btn" id="prev-projects" type="button" aria-label="Previous projects">←</button>
-          <button class="carousel-btn" id="next-projects" type="button" aria-label="Next projects">→</button>
-        </div>
+        <p class="section-note">Latest from GitHub</p>
       </div>
-      <div class="carousel-track" id="repo-list" aria-live="polite">
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
+      <div class="scroller">
+        <button class="scroll-arrow scroll-prev" id="prev-projects" type="button" aria-label="Previous projects">←</button>
+        <div class="scroll-track repo-track" id="repo-list" aria-live="polite">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+        <button class="scroll-arrow scroll-next" id="next-projects" type="button" aria-label="Next projects">→</button>
+        <div class="scroll-progress"><span id="repo-progress"></span></div>
       </div>
     </section>
 
     <section class="section" id="activity" aria-labelledby="activity-title">
       <div class="section-head">
         <h2 id="activity-title">Activity</h2>
-        <p class="section-note">Last 12 months · scroll to view</p>
+        <p class="section-note">Last 12 months · drag or use the arrows</p>
       </div>
-      <div class="calendar" id="calendar">
+      <div class="calendar glass" id="calendar">
         <div class="calendar-top">
           <span class="calendar-label">Contributions</span>
           <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Full profile</a>
         </div>
-        <div class="calendar-body" id="calendar-body" tabindex="0" aria-label="Contribution graph, scroll horizontally">
-          <img id="github-calendar" src="" alt="GitHub contribution graph for lfurtif" width="720" height="112">
-          <div class="calendar-fallback" hidden>
-            <p>The contribution graph is unavailable right now.</p>
-            <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        <div class="scroller cal-scroller">
+          <button class="scroll-arrow scroll-prev" id="prev-activity" type="button" aria-label="Scroll contributions left">←</button>
+          <div class="scroll-track cal-track" id="calendar-body" tabindex="0" aria-label="Contribution graph, scroll horizontally">
+            <img id="github-calendar" src="" alt="GitHub contribution graph for lfurtif" width="720" height="112">
+            <div class="calendar-fallback" hidden>
+              <p>The contribution graph is unavailable right now.</p>
+              <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
           </div>
+          <button class="scroll-arrow scroll-next" id="next-activity" type="button" aria-label="Scroll contributions right">→</button>
+          <div class="scroll-progress"><span id="cal-progress"></span></div>
         </div>
       </div>
     </section>
