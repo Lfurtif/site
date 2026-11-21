@@ -2,4 +2,4 @@
 
 <https://lfurtif.github.io/site/>
 
-C'est mon site, fait main. Merci de ne pas le copier ni le republier.
+Une seule page statique, sans script ni dépendance. Fait main, merci de ne pas le copier ni le republier.
