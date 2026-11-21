@@ -1,5 +1,6 @@
-/* Lava lamp background — WebGL metaballs with a CSS fallback.
-   Kept dependency-free and deliberately inexpensive on phones. */
+/* Lava lamp background — WebGL metaballs, reduced to a quiet ink texture.
+   No glow, no hue contrast: it moves, it does not perform.
+   Unslop direction by Damir Sokolovsky (@heydamir), CC BY 4.0. */
 (() => {
   const canvas = document.getElementById('lava-canvas');
   if (!canvas) return;
@@ -11,10 +12,9 @@
   const scale = Math.sqrt(area / REFERENCE);
   // Keep coverage roughly constant: a phone needs fewer, smaller blobs than a desktop.
   const COUNT = Math.max(10, Math.min(34, Math.round(22 * area / REFERENCE)));
-  const COLOR_A = new Float32Array([0.71, 1.0, 0.24]);   // lime
-  const COLOR_B = new Float32Array([0.62, 0.35, 0.98]);  // violet
-  const COLOR_C = new Float32Array([0.98, 0.42, 0.75]);  // pink, just a hint
-  const COLOR_BG = new Float32Array([0.026, 0.022, 0.041]);
+  const COLOR_A = new Float32Array([0.20, 0.17, 0.30]);  // ink violet
+  const COLOR_B = new Float32Array([0.13, 0.16, 0.25]);  // ink blue
+  const COLOR_BG = new Float32Array([0.043, 0.051, 0.078]); // #0b0d14
 
   const gl = canvas.getContext('webgl', {
     alpha: false, antialias: false, depth: false, stencil: false,
@@ -30,11 +30,8 @@
     precision mediump float;
     #endif
     uniform vec3 u_blobs[${COUNT}];
-    uniform vec3 u_a, u_b, u_c, u_bg;
+    uniform vec3 u_a, u_b, u_bg;
     uniform vec2 u_res;
-    uniform float u_time;
-
-    float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 
     void main() {
       vec2 p = gl_FragCoord.xy;
@@ -46,17 +43,13 @@
       }
 
       float shape = smoothstep(0.95, 1.30, field);
-      float core  = smoothstep(1.60, 2.80, field);
-      float mixv  = clamp(p.y / u_res.y + 0.10 * sin(u_time * 0.00024), 0.0, 1.0);
-      vec3 lava   = mix(mix(u_a, u_b, mixv), u_c, 0.14 * core);
-
-      vec3 col = mix(u_bg, lava, shape);
-      col += core * lava * 0.18;
+      float mixv  = clamp(p.y / u_res.y, 0.0, 1.0);
+      vec3 ink = mix(u_a, u_b, mixv);
+      vec3 col = mix(u_bg, ink, shape * 0.42);
 
       vec2 uv = p / u_res;
       float vignette = smoothstep(1.05, 0.28, length(uv - 0.5));
-      col *= mix(0.58, 1.0, vignette);
-      col += (hash(p + fract(u_time) * 97.0) - 0.5) * 0.010;
+      col *= mix(0.78, 1.0, vignette);
 
       gl_FragColor = vec4(col, 1.0);
     }
@@ -106,10 +99,8 @@
     loc.blobs = gl.getUniformLocation(program, 'u_blobs[0]');
     loc.a = gl.getUniformLocation(program, 'u_a');
     loc.b = gl.getUniformLocation(program, 'u_b');
-    loc.c = gl.getUniformLocation(program, 'u_c');
     loc.bg = gl.getUniformLocation(program, 'u_bg');
     loc.res = gl.getUniformLocation(program, 'u_res');
-    loc.time = gl.getUniformLocation(program, 'u_time');
     return true;
   }
 
@@ -155,10 +146,8 @@
     gl.uniform3fv(loc.blobs, data);
     gl.uniform3fv(loc.a, COLOR_A);
     gl.uniform3fv(loc.b, COLOR_B);
-    gl.uniform3fv(loc.c, COLOR_C);
     gl.uniform3fv(loc.bg, COLOR_BG);
     gl.uniform2f(loc.res, w, h);
-    gl.uniform1f(loc.time, t);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
     raf = reducedMotion ? 0 : requestAnimationFrame(frame);

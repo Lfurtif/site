@@ -3,94 +3,72 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#08060e">
-  <meta name="description" content="Le site perso de Lfurtif. Cybersécurité, code, et un peu de fluff.">
-  <title>Lfurtif — sécu, code &amp; fluff</title>
+  <meta name="theme-color" content="#0b0d14">
+  <meta name="description" content="Projets et notes de Lfurtif, développeur passionné de cybersécurité.">
+  <title>Lfurtif — développement et cybersécurité</title>
   <link rel="icon" href="ressources/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="stylesheet" href="styles.css">
+  <!-- Unslop direction by Damir Sokolovsky (@heydamir), CC BY 4.0 -->
 </head>
 <body>
   <canvas id="lava-canvas" aria-hidden="true"></canvas>
-  <div class="lava-fallback" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-  <div class="grain" aria-hidden="true"></div>
-
+  <div class="lava-fallback" aria-hidden="true"></div>
   <a class="skip-link" href="#main">Aller au contenu</a>
 
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="Lfurtif, retour en haut">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 64 64"><g fill="currentColor"><ellipse cx="19" cy="22" rx="5" ry="7" transform="rotate(-22 19 22)"/><ellipse cx="29" cy="16" rx="5" ry="7.5" transform="rotate(-8 29 16)"/><ellipse cx="41" cy="17" rx="5" ry="7.5" transform="rotate(12 41 17)"/><ellipse cx="50" cy="26" rx="5" ry="7" transform="rotate(28 50 26)"/><path d="M34 30c-8 0-14 6-14 12 0 5 4 8 9 8 2 0 3-1 5-1s3 1 5 1c5 0 9-3 9-8 0-6-6-12-14-12Z"/></g></svg>
-      </span>
-      <span class="brand-name">lfurtif</span>
-    </a>
-    <nav class="nav" aria-label="Navigation principale">
-      <a href="#about">À propos</a>
-      <a href="#projects">Projets</a>
-      <a href="#activity">Activité</a>
-      <a class="nav-cta" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">
-        GitHub <span aria-hidden="true">↗</span>
-      </a>
-    </nav>
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Lfurtif, retour en haut">lfurtif<span class="caret" aria-hidden="true">_</span></a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#about">À propos</a>
+        <a href="#projects">Projets</a>
+        <a href="#activity">Activité</a>
+        <a class="nav-cta" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
   </header>
 
   <main id="main">
     <section class="hero" id="top">
-      <div class="hero-copy reveal">
-        <p class="eyebrow"><span class="pulse" aria-hidden="true"></span> cybersécurité · code · fluff</p>
-        <h1>Je bidouille, je casse,<br>et je <em>recommence</em>.</h1>
-        <p class="lede">
-          Dev et curieux. J'aime les systèmes, les puzzles et les projets un peu tordus.
-          Bienvenue dans mon coin d'internet.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects">Voir les projets <span aria-hidden="true">↓</span></a>
-          <a class="btn btn-ghost" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Mon GitHub <span aria-hidden="true">↗</span></a>
+      <div>
+        <p class="kicker">Portfolio — développement et cybersécurité</p>
+        <h1>Je développe des outils et j'étudie comment les systèmes cassent</h1>
+        <p class="lede">Projets, expérimentations et notes de Lfurtif. Le code est sur GitHub, l'essentiel est ici.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#projects">Voir les projets</a>
+          <a class="btn btn-secondary" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil GitHub</a>
         </div>
-        <dl class="stats" id="stats" aria-label="Statistiques GitHub">
+        <dl class="stats" aria-label="Statistiques GitHub">
           <div class="stat"><dt>Projets</dt><dd data-stat="repositories">—</dd></div>
           <div class="stat"><dt>Abonnés</dt><dd data-stat="followers">—</dd></div>
           <div class="stat"><dt>Suivis</dt><dd data-stat="following">—</dd></div>
         </dl>
       </div>
 
-      <aside class="card profile reveal" id="about" aria-labelledby="profile-title">
-        <div class="profile-head">
-          <div class="avatar-wrap">
-            <img src="ressources/lfurtif.jpg" alt="Portrait de Lfurtif" width="96" height="96">
+      <figure class="profile" id="about">
+        <img class="portrait" src="ressources/lfurtif.jpg" alt="Portrait de Lfurtif" width="553" height="553">
+        <figcaption class="profile-caption">
+          <h2>Lfurtif</h2>
+          <p>Développeur, curieux de sécurité</p>
+          <p class="now">En ce moment : des outils pour coder depuis un téléphone</p>
+          <div class="links">
+            <a class="link" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+            <a class="link" href="#projects">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+              Projets
+            </a>
           </div>
-          <div>
-            <h2 id="profile-title">Lfurtif</h2>
-            <p class="profile-role">dev &amp; curieux</p>
-          </div>
-        </div>
-        <p class="profile-bio" data-field="bio">Passionné de cybersécurité et de programmation.</p>
-        <div class="profile-extra">
-          <span class="chip" data-field="location" hidden></span>
-          <a class="chip" data-field="blog" href="#" target="_blank" rel="noopener noreferrer" hidden></a>
-        </div>
-        <div class="profile-divider"></div>
-        <p class="now"><span aria-hidden="true">▸</span> en ce moment : des outils pour coder depuis mon téléphone.</p>
-        <div class="social-row">
-          <a class="social" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2.2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.68 5.4-5.24 5.69.41.36.78 1.05.78 2.12v3.14c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
-            <span>GitHub</span>
-          </a>
-          <a class="social" href="#projects" aria-label="Voir les projets">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z"/></svg>
-            <span>Projets</span>
-          </a>
-        </div>
-      </aside>
+        </figcaption>
+      </figure>
     </section>
 
-    <section class="section reveal" id="projects" aria-labelledby="projects-title">
+    <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="section-head">
-        <div>
-          <p class="section-index">01 / Projets</p>
-          <h2 id="projects-title">Trucs que j'ai faits</h2>
-        </div>
-        <p class="section-note">en direct de GitHub</p>
+        <h2 id="projects-title">Projets</h2>
+        <p class="section-note">Les plus récents sur GitHub</p>
       </div>
       <div class="repo-grid" id="repo-list" aria-live="polite">
         <div class="skeleton-card"></div>
@@ -99,24 +77,21 @@
       </div>
     </section>
 
-    <section class="section reveal" id="activity" aria-labelledby="activity-title">
+    <section class="section" id="activity" aria-labelledby="activity-title">
       <div class="section-head">
-        <div>
-          <p class="section-index">02 / Activité</p>
-          <h2 id="activity-title">Une année de commits</h2>
-        </div>
-        <p class="section-note">12 derniers mois</p>
+        <h2 id="activity-title">Activité</h2>
+        <p class="section-note">Douze derniers mois</p>
       </div>
-      <div class="card calendar" id="calendar">
+      <div class="calendar" id="calendar">
         <div class="calendar-top">
-          <span class="calendar-label"><span class="pulse" aria-hidden="true"></span> Contributions</span>
-          <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil complet <span aria-hidden="true">↗</span></a>
+          <span class="calendar-label">Contributions</span>
+          <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil complet</a>
         </div>
         <div class="calendar-body">
           <img id="github-calendar" src="" alt="Graphe de contributions GitHub de lfurtif" loading="lazy" width="720" height="112">
           <div class="calendar-fallback" hidden>
             <p>Le graphe est indisponible pour le moment.</p>
-            <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Voir sur GitHub ↗</a>
+            <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Voir sur GitHub</a>
           </div>
         </div>
       </div>
@@ -124,11 +99,8 @@
   </main>
 
   <footer class="footer">
-    <span class="footer-mark" aria-hidden="true">
-      <svg viewBox="0 0 64 64"><g fill="currentColor"><ellipse cx="19" cy="22" rx="5" ry="7" transform="rotate(-22 19 22)"/><ellipse cx="29" cy="16" rx="5" ry="7.5" transform="rotate(-8 29 16)"/><ellipse cx="41" cy="17" rx="5" ry="7.5" transform="rotate(12 41 17)"/><ellipse cx="50" cy="26" rx="5" ry="7" transform="rotate(28 50 26)"/><path d="M34 30c-8 0-14 6-14 12 0 5 4 8 9 8 2 0 3-1 5-1s3 1 5 1c5 0 9-3 9-8 0-6-6-12-14-12Z"/></g></svg>
-    </span>
-    <p>fait main, pas volé · <span id="year"></span></p>
-    <a href="#top">Retour en haut ↑</a>
+    <p>© <span id="year"></span> Lfurtif</p>
+    <a href="#top">Retour en haut</a>
   </footer>
 
   <script src="back.js"></script>
