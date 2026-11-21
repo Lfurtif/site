@@ -2,126 +2,110 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0d14">
   <meta name="description" content="Lfurtif — red team, développement, réseaux, électronique. Objectif OSCP.">
-  <title>Lfurtif — Red team, dev, réseaux, électronique</title>
+  <title>Lfurtif — red team, dev, réseaux, électronique</title>
   <link rel="icon" href="ressources/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://api.github.com">
+  <link rel="stylesheet" href="styles.css">
   <!-- Unslop direction by Damir Sokolovsky (@heydamir), CC BY 4.0 -->
-  <style>
-    :root{
-      --bg:#0b0d14; --surface:#11141c; --line:rgba(238,240,245,.09);
-      --text:#eef0f5; --second:#a3a9b8; --muted:#7a8296; --accent:#a78bfa;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0; background:var(--bg); color:var(--text);
-      font:400 15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      -webkit-font-smoothing:antialiased;
-    }
-    a{color:inherit;text-decoration:none}
-    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-
-    /* Lava lamp, version CSS: trois formes, aucune couleur vive, aucun script. */
-    .lava{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.055}
-    .lava i{
-      position:absolute;width:46vmax;height:46vmax;border-radius:50%;
-      background:radial-gradient(circle,var(--accent),transparent 70%);
-      filter:blur(60px);will-change:transform;
-      animation:drift 36s ease-in-out infinite alternate;
-    }
-    .lava i:nth-child(2){left:42%;top:24%;animation-duration:44s;animation-delay:-12s}
-    .lava i:nth-child(3){left:18%;top:58%;animation-duration:52s;animation-delay:-26s}
-    @keyframes drift{from{transform:translate(-8%,-4%) scale(.9)}to{transform:translate(12%,10%) scale(1.2)}}
-
-    .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 24px}
-    header{display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid var(--line)}
-    .logo{font-size:16px;font-weight:500}
-    .logo span{color:var(--accent)}
-    .gh{font-size:13px;color:var(--second)}
-    .gh:hover{color:var(--text)}
-
-    .intro{display:flex;align-items:center;gap:16px;padding:48px 0 40px}
-    .intro img{width:64px;height:64px;object-fit:cover;border-radius:8px;background:var(--surface)}
-    .intro h1{margin:0;font-size:24px;font-weight:500;letter-spacing:-.01em}
-    .intro p{margin:4px 0 0;color:var(--second);font-size:14px}
-
-    .objective{
-      display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-      padding:16px 20px;margin-bottom:40px;
-      border:1px solid var(--line);border-radius:8px;background:var(--surface);
-    }
-    .objective b{font-weight:500}
-    .objective span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-
-    h2{
-      margin:0 0 16px;font-size:12px;font-weight:400;color:var(--muted);
-      text-transform:uppercase;letter-spacing:.08em;
-    }
-    section{padding:28px 0;border-top:1px solid var(--line)}
-    section>p{margin:0;color:var(--second)}
-
-    .domains{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-    .domains div{background:var(--surface);padding:16px}
-    .domains b{display:block;font-weight:500;font-size:14px}
-    .domains small{display:block;margin-top:4px;color:var(--muted);font-size:12px;line-height:1.5}
-
-    li span{color:var(--muted);font-size:13px}
-
-    footer{display:flex;justify-content:space-between;padding:24px 0 48px;color:var(--muted);font-size:12px}
-    @media(max-width:560px){
-      .domains{grid-template-columns:1fr}
-      .intro{padding:32px 0}
-      .objective{flex-direction:column;gap:4px}
-    }
-    @media(prefers-reduced-motion:reduce){.lava i{animation:none}}
-  </style>
 </head>
 <body>
-  <div class="lava" aria-hidden="true"><i></i><i></i><i></i></div>
+  <canvas id="lava-canvas" aria-hidden="true"></canvas>
+  <div class="lava-fallback" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Aller au contenu</a>
 
-  <div class="wrap">
-    <header>
-      <a class="logo" href="#top">lfurtif<span>_</span></a>
-      <a class="gh" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-    </header>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Lfurtif, retour en haut">lfurtif<span class="caret" aria-hidden="true">_</span></a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#about">À propos</a>
+        <a href="#projects">Projets</a>
+        <a href="#activity">Activité</a>
+        <a class="nav-cta" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
 
-    <main id="top">
-      <div class="intro">
-        <img src="ressources/lfurtif.jpg" alt="Portrait de Lfurtif" width="64" height="64">
-        <div>
-          <h1>Lfurtif</h1>
-          <p>Red team · Développement · Réseaux · Électronique</p>
+  <main id="main">
+    <section class="hero" id="top">
+      <div>
+        <p class="kicker">Objectif — OSCP</p>
+        <h1>Lfurtif</h1>
+        <p class="lede">Red team · Développement · Réseaux · Électronique.<br>Pentest, outillage, systèmes et hardware.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#projects">Voir les projets</a>
+          <a class="btn btn-secondary" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil GitHub</a>
         </div>
+        <dl class="stats" aria-label="Statistiques GitHub">
+          <div class="stat"><dt>Projets</dt><dd data-stat="repositories">—</dd></div>
+          <div class="stat"><dt>Abonnés</dt><dd data-stat="followers">—</dd></div>
+          <div class="stat"><dt>Suivis</dt><dd data-stat="following">—</dd></div>
+        </dl>
       </div>
 
-      <div class="objective">
-        <b>Objectif — OSCP</b>
-        <span>Pentest et exploitation pratique</span>
-      </div>
-
-      <section>
-        <h2>Profil</h2>
-        <p>Sécurité offensive, systèmes et hardware. J'aime comprendre comment ça fonctionne, puis tester comment ça tient.</p>
-      </section>
-
-      <section>
-        <h2>Domaines</h2>
-        <div class="domains">
-          <div><b>Red team</b><small>Reconnaissance, exploitation, post-exploitation</small></div>
-          <div><b>Développement</b><small>Outils, automatisation, Android, Kotlin</small></div>
-          <div><b>Réseaux</b><small>Protocoles, infrastructure, segmentation</small></div>
-          <div><b>Électronique</b><small>Prototypage, bus, microcontrôleurs</small></div>
+      <aside class="profile" id="about">
+        <div class="profile-head">
+          <img class="avatar" src="ressources/lfurtif.jpg" alt="Portrait de Lfurtif" width="64" height="64">
+          <div>
+            <h2>Lfurtif</h2>
+            <p>Développeur, curieux de sécurité</p>
+          </div>
         </div>
-      </section>
+        <p class="now">En ce moment : des outils pour coder depuis un téléphone</p>
+        <div class="links">
+          <a class="link" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+          <a class="link" href="#projects">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+            Projets
+          </a>
+        </div>
+      </aside>
+    </section>
 
-    </main>
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section-head">
+        <h2 id="projects-title">Projets</h2>
+        <p class="section-note">Les plus récents sur GitHub</p>
+      </div>
+      <div class="repo-grid" id="repo-list" aria-live="polite">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </section>
 
-    <footer>
-      <span>© 2026 Lfurtif</span>
-      <a href="#top">Haut ↑</a>
-    </footer>
-  </div>
+    <section class="section" id="activity" aria-labelledby="activity-title">
+      <div class="section-head">
+        <h2 id="activity-title">Activité</h2>
+        <p class="section-note">Douze derniers mois</p>
+      </div>
+      <div class="calendar" id="calendar">
+        <div class="calendar-top">
+          <span class="calendar-label">Contributions</span>
+          <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil complet</a>
+        </div>
+        <div class="calendar-body">
+          <img id="github-calendar" src="" alt="Graphe de contributions GitHub de lfurtif" loading="lazy" width="720" height="112">
+          <div class="calendar-fallback" hidden>
+            <p>Le graphe est indisponible pour le moment.</p>
+            <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Voir sur GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Lfurtif</p>
+    <a href="#top">Retour en haut</a>
+  </footer>
+
+  <script src="back.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
