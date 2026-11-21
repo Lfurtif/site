@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // One set defines the loop length. Clone it until the track is wider
         // than the viewport plus one set, so the wrap is never visible.
         allRepos = repos;
+        // With only one or two public repos, wide cards read as a featured
+        // carousel instead of a row of identical small cards.
+        track.classList.toggle('few', repos.length < 3);
         const gap = parseFloat(getComputedStyle(track).gap) || 15;
         repos.forEach(repo => track.appendChild(makeCard(repo)));
         setWidth = track.scrollWidth + gap;

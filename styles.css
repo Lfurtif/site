@@ -11,17 +11,14 @@ body {
     align-items: center;
 }
 
-.grid {
+.page {
     position: relative;
     z-index: 2;
-    display: grid;
-    gap: 20px;
     width: 90%;
     max-width: 1100px;
-    grid-template-columns: 340px minmax(0, 1fr);
-    grid-template-areas: 
-        "profile repos" 
-        "socials socials";
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
 }
 
 .card {
@@ -32,27 +29,63 @@ body {
     padding: 25px;
 }
 
-.profile        { grid-area: profile; }
-.repo-carousel  { grid-area: repos; min-width: 0; }
-.socials        { grid-area: socials; min-width: 0; }
-
-.profile-head {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+/* Grid 1 — about: narrow identity card, wide focus list. */
+.about-grid {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 20px;
 }
 
+.profile-head { display: flex; align-items: center; gap: 15px; }
 .profile-head img {
     border-radius: 50%;
     object-fit: cover;
-    width: 100px;
-    height: 100px;
+    width: 88px;
+    height: 88px;
+    flex: none;
+}
+.profile-head h2 { margin: 0 0 4px 0; font-size: 1.4rem; }
+.profile-head p { margin: 0; font-size: 0.9rem; color: rgba(255, 240, 219, 0.65); }
+.goal {
+    margin: 20px 0 0;
+    padding: 10px 14px;
+    border-left: 2px solid rgba(167, 139, 250, 0.6);
+    background: rgba(167, 139, 250, 0.06);
+    font-size: 0.95rem;
+    color: #d6c6ff;
 }
 
-/* Carousel: fixed-size cards in a clipped viewport. The track is moved by JS. */
+.focus h3, .socials h3 { margin: 0 0 14px 0; font-size: 1rem; color: #d6c6ff; }
+.focus ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.focus li { display: flex; align-items: baseline; gap: 14px; }
+.focus b { flex: 0 0 140px; font-weight: 500; }
+.focus span { color: rgba(255, 240, 219, 0.6); font-size: 0.9rem; }
+
+/* Grid 2 — projects: compact header above a clipped horizontal track. */
+.repos-grid {
+    display: grid;
+    grid-template-areas: "head" "track";
+    gap: 12px;
+    background: rgba(15, 15, 15, 0.45);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 20px;
+    padding: 20px 25px 16px;
+    min-width: 0;
+}
+.repos-head {
+    grid-area: head;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+}
+.repos-head h2 { margin: 0; font-size: 1.3rem; }
+.hint { font-size: 0.8rem; color: rgba(167, 139, 250, 0.75); }
+
 .carousel-viewport {
+    grid-area: track;
     overflow: hidden;
-    margin-top: 20px;
     padding: 4px 0 8px;
     cursor: grab;
     touch-action: pan-y;
@@ -76,15 +109,16 @@ body {
     border: 1px solid rgba(167, 139, 250, 0.12);
     text-decoration: none;
     color: inherit;
-    transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s, border-color 0.3s;
 }
-
+.carousel-track.few .repo-item {
+    flex-basis: min(340px, 76vw);
+    width: min(340px, 76vw);
+}
 .repo-item:hover {
     background: rgba(167, 139, 250, 0.09);
     border-color: rgba(167, 139, 250, 0.45);
-    transform: translateY(-2px);
 }
-
 .repo-item h4 {
     margin: 0 0 8px 0;
     color: #d6c6ff;
@@ -93,7 +127,6 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .repo-item p {
     font-size: 0.85rem;
     color: rgba(255, 240, 219, 0.6);
@@ -104,46 +137,16 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+.repo-empty { margin: 0; font-size: 0.9rem; color: rgba(255, 240, 219, 0.6); }
 
-.repo-empty {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgba(255, 240, 219, 0.6);
-}
-
-/* Space freed by the smaller grid. */
-.passion {
-    margin-top: 28px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(167, 139, 250, 0.15);
-}
-.passion h3 {
-    margin: 0 0 8px 0;
-    color: #d6c6ff;
-    font-size: 1rem;
-    font-weight: 500;
-}
-.passion p {
-    margin: 0;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: rgba(255, 240, 219, 0.7);
-}
-
-/* Full-width calendar: the graph can finally be read instead of being shrunk
-   into the narrow side column. */
-.socials-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-}
+/* Calendar keeps the full width so the graph stays readable. */
+.socials { min-width: 0; }
+.socials-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .socials-head h3 { margin: 0; }
 .social-links { display: flex; gap: 20px; }
 .social-icon img { height: 32px; width: 32px; }
-
 .calendar-container {
-    margin-top: 16px;
+    margin-top: 14px;
     padding: 12px;
     border-radius: 12px;
     background: rgba(167, 139, 250, 0.04);
@@ -168,13 +171,11 @@ body {
 
 @media (max-width: 760px) {
     body { align-items: flex-start; padding: 20px 0; }
-    .grid {
-        width: calc(100% - 32px);
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas: "profile" "repos" "socials";
-    }
+    .page { width: calc(100% - 32px); }
+    .about-grid { grid-template-columns: minmax(0, 1fr); }
     .card { padding: 20px; }
-    .profile-head img { width: 80px; height: 80px; }
-    .repo-item { flex-basis: 200px; width: 200px; }
+    .repos-grid { padding: 18px 20px 14px; }
+    .focus b { flex-basis: 120px; }
+    .profile-head img { width: 72px; height: 72px; }
     .calendar-container { padding: 8px; }
 }

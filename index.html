@@ -9,29 +9,42 @@
 <body>
     <canvas id="blob-canvas"></canvas>
 
-    <main class="grid">
-        <header class="card profile">
-            <div class="profile-head">
-                <img src="ressources/lfurtif.jpg" alt="Profile" width="100" height="100">
-                <h2>Lfurtif</h2>
-            </div>
-            <h5>Cybersecurity and Programming enthusiast</h5>
-        </header>
+    <main class="page">
+        <div class="about-grid">
+            <header class="card profile">
+                <div class="profile-head">
+                    <img src="ressources/lfurtif.jpg" alt="Profile" width="88" height="88">
+                    <div>
+                        <h2>Lfurtif</h2>
+                        <p>Red team · Dev · Electronics</p>
+                    </div>
+                </div>
+                <p class="goal">Goal: OSCP</p>
+            </header>
 
-        <section class="card repo-carousel">
-            <h2>Check out my projects !</h2>
+            <section class="card focus">
+                <h3>Focus</h3>
+                <ul>
+                    <li><b>Electronics</b><span>Circuits, buses, prototypes</span></li>
+                    <li><b>Development</b><span>Tools, automation, Android</span></li>
+                    <li><b>Offensive security</b><span>Labs, exploitation, red team</span></li>
+                </ul>
+            </section>
+        </div>
+
+        <section class="repos-grid">
+            <div class="repos-head">
+                <h2>Projects</h2>
+                <span class="hint">Drag to browse</span>
+            </div>
             <div class="carousel-viewport" id="carousel-viewport" aria-label="GitHub projects carousel">
                 <div id="repo-list" class="carousel-track"></div>
-            </div>
-            <div class="passion">
-                <h3>What drives me</h3>
-                <p>I'm drawn to the low level: circuits that hum, packets that lie, and code that makes both make sense. Electronics taught me patience. Development taught me precision. Offsec taught me to question everything.</p>
             </div>
         </section>
 
         <section class="card socials">
             <div class="socials-head">
-                <h3>GitHub Contributions</h3>
+                <h3>Contributions</h3>
                 <div class="social-links">
                     <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer" class="social-icon">
                         <img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" width="32" height="32">
