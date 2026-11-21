@@ -47,8 +47,8 @@ button { font: inherit; }
    but below the content (no negative z-index, which browsers paint differently). */
 #lava-canvas {
   position: fixed; inset: -6%; z-index: 0; pointer-events: none;
-  filter: blur(44px) saturate(1.1);
-  opacity: .55;
+  filter: blur(24px) saturate(1.15);
+  opacity: .62;
 }
 .lava-fallback { display: none; position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .lava-fallback::before, .lava-fallback::after {
@@ -89,9 +89,9 @@ main, .footer { position: relative; z-index: 1; }
 main { width: min(1184px, 100%); margin: 0 auto; padding: 0 32px; }
 
 .hero {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 0.82fr);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 0.6fr);
   gap: 80px; align-items: center;
-  min-height: 640px; padding: 96px 0 96px;
+  min-height: 520px; padding: 88px 0 88px;
 }
 .kicker { margin: 0 0 24px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 h1 {
@@ -103,27 +103,6 @@ h1 {
   letter-spacing: -.028em;
 }
 .lede { max-width: 34rem; margin: 24px 0 0; font-size: 16px; color: var(--secondary); }
-.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-.btn {
-  height: 44px; display: inline-flex; align-items: center; gap: 8px;
-  padding: 0 18px; border-radius: var(--radius-control);
-  font-size: 14px; font-weight: 500;
-  border: 1px solid transparent;
-  transition: background-color 140ms var(--ease), border-color 140ms var(--ease);
-}
-.btn-primary { background: var(--text); color: var(--bg); }
-.btn-primary:hover { background: #ffffff; }
-.btn-secondary { border-color: var(--hairline); color: var(--text); }
-.btn-secondary:hover { background: var(--raised); border-color: var(--secondary); }
-
-.stats { display: flex; gap: 48px; margin: 64px 0 0; }
-.stat dt { font-size: 12px; color: var(--muted); }
-.stat dd {
-  margin: 4px 0 0; font-family: var(--mono);
-  font-size: 28px; line-height: 1; font-weight: 400;
-  font-variant-numeric: tabular-nums;
-}
-
 .profile {
   margin: 0; padding: 24px;
   border: 1px solid var(--hairline); border-radius: var(--radius-card);
@@ -136,8 +115,7 @@ h1 {
 }
 .profile h2 { margin: 0; font-size: 18px; font-weight: 500; }
 .profile-head p { margin: 4px 0 0; font-size: 14px; color: var(--secondary); }
-.now { margin: 20px 0 0; font-family: var(--mono); font-size: 12px; color: var(--muted); }
-.links { display: flex; gap: 20px; margin-top: 24px; }
+.links { display: flex; gap: 20px; margin-top: 20px; }
 .link {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 14px; color: var(--secondary);
@@ -148,10 +126,31 @@ h1 {
 
 .section { padding: 80px 0; border-top: 1px solid var(--hairline); }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+#projects .section-head { align-items: center; }
 .section h2 { margin: 0; font-size: 28px; line-height: 1.15; font-weight: 500; letter-spacing: -.015em; }
 .section-note { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 
-.repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.carousel-track {
+  display: flex; gap: 16px;
+  overflow-x: auto; overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  padding: 4px 0 16px;
+  scrollbar-width: none;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-controls { display: flex; gap: 8px; }
+.carousel-btn {
+  width: 36px; height: 36px; border-radius: var(--radius-control);
+  border: 1px solid var(--hairline); background: var(--surface);
+  color: var(--text); font-size: 15px; cursor: pointer;
+  transition: background-color 140ms var(--ease), border-color 140ms var(--ease), opacity 140ms var(--ease);
+}
+.carousel-btn:hover:not(:disabled) { background: var(--raised); border-color: var(--secondary); }
+.carousel-btn:disabled { opacity: .35; cursor: default; }
+.repo-card, .skeleton-card {
+  flex: 0 0 clamp(240px, 30vw, 320px);
+  scroll-snap-align: start;
+}
 .repo-card {
   display: flex; flex-direction: column; min-height: 168px;
   padding: 20px; border-radius: var(--radius-card);
@@ -167,7 +166,7 @@ h1 {
 .repo-meta { display: flex; flex-wrap: wrap; gap: 16px; font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .repo-meta .lang { display: inline-flex; align-items: center; gap: 6px; }
 .lang-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
-.repo-error { grid-column: 1 / -1; padding: 24px; border: 1px solid var(--hairline); border-radius: var(--radius-card); color: var(--secondary); }
+.repo-error { flex: 1 0 100%; padding: 24px; border: 1px solid var(--hairline); border-radius: var(--radius-card); color: var(--secondary); }
 .repo-error button {
   margin-left: 8px; padding: 6px 12px; border-radius: var(--radius-control);
   background: var(--raised); border: 1px solid var(--hairline); color: var(--text); cursor: pointer;
@@ -178,9 +177,15 @@ h1 {
 .calendar-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
 .calendar-label { font-family: var(--mono); font-size: 12px; color: var(--secondary); }
 .calendar-top a { font-size: 13px; color: var(--accent); }
-.calendar-body { margin-top: 24px; }
+.calendar-body {
+  margin-top: 24px; overflow-x: auto; padding-bottom: 12px;
+  scrollbar-width: thin; scrollbar-color: var(--accent) transparent;
+}
+.calendar-body::-webkit-scrollbar { height: 6px; }
+.calendar-body::-webkit-scrollbar-track { background: transparent; }
+.calendar-body::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 6px; }
 #github-calendar {
-  width: 100%; max-width: 720px; height: auto; min-width: 0;
+  display: block; width: 100%; min-width: 860px; max-width: none; height: auto;
   filter: invert(.86) hue-rotate(180deg) saturate(.55); opacity: .9;
   border-radius: 4px;
 }
@@ -206,12 +211,10 @@ h1 {
   .topbar-inner, main, .footer { padding-left: 20px; padding-right: 20px; }
   .nav a:not(.nav-cta) { display: none; }
   h1 { font-size: 38px; letter-spacing: -.02em; }
-  .stats { gap: 32px; margin-top: 48px; }
-  .stat dd { font-size: 24px; }
-  .actions { flex-direction: column; align-items: stretch; }
-  .btn { justify-content: center; }
   .section { padding: 56px 0; }
-  .section-head { flex-direction: column; gap: 4px; }
+  .section-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  #projects .section-head { flex-direction: row; align-items: center; }
+  .repo-card, .skeleton-card { flex-basis: 260px; }
   .profile { padding: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0d14">
-  <meta name="description" content="Lfurtif — red team, développement, réseaux, électronique. Objectif OSCP.">
-  <title>Lfurtif — red team, dev, réseaux, électronique</title>
+  <meta name="description" content="Lfurtif — red team, development, networks, electronics. Goal: OSCP.">
+  <title>Lfurtif — Red team, dev, networks, electronics</title>
   <link rel="icon" href="ressources/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="stylesheet" href="styles.css">
@@ -14,15 +14,14 @@
 <body>
   <canvas id="lava-canvas" aria-hidden="true"></canvas>
   <div class="lava-fallback" aria-hidden="true"></div>
-  <a class="skip-link" href="#main">Aller au contenu</a>
+  <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="topbar">
     <div class="topbar-inner">
-      <a class="brand" href="#top" aria-label="Lfurtif, retour en haut">lfurtif<span class="caret" aria-hidden="true">_</span></a>
-      <nav class="nav" aria-label="Navigation principale">
-        <a href="#about">À propos</a>
-        <a href="#projects">Projets</a>
-        <a href="#activity">Activité</a>
+      <a class="brand" href="#top" aria-label="Lfurtif, back to top">lfurtif<span class="caret" aria-hidden="true">_</span></a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#activity">Activity</a>
         <a class="nav-cta" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
@@ -31,37 +30,23 @@
   <main id="main">
     <section class="hero" id="top">
       <div>
-        <p class="kicker">Objectif — OSCP</p>
+        <p class="kicker">Goal — OSCP</p>
         <h1>Lfurtif</h1>
-        <p class="lede">Red team · Développement · Réseaux · Électronique.<br>Pentest, outillage, systèmes et hardware.</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#projects">Voir les projets</a>
-          <a class="btn btn-secondary" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil GitHub</a>
-        </div>
-        <dl class="stats" aria-label="Statistiques GitHub">
-          <div class="stat"><dt>Projets</dt><dd data-stat="repositories">—</dd></div>
-          <div class="stat"><dt>Abonnés</dt><dd data-stat="followers">—</dd></div>
-          <div class="stat"><dt>Suivis</dt><dd data-stat="following">—</dd></div>
-        </dl>
+        <p class="lede">Red team · Development · Networks · Electronics<br>Pentesting, tooling, systems and hardware.</p>
       </div>
 
       <aside class="profile" id="about">
         <div class="profile-head">
-          <img class="avatar" src="ressources/lfurtif.jpg" alt="Portrait de Lfurtif" width="64" height="64">
+          <img class="avatar" src="ressources/lfurtif.jpg" alt="Portrait of Lfurtif" width="64" height="64">
           <div>
             <h2>Lfurtif</h2>
-            <p>Développeur, curieux de sécurité</p>
+            <p>Developer, security-minded</p>
           </div>
         </div>
-        <p class="now">En ce moment : des outils pour coder depuis un téléphone</p>
         <div class="links">
           <a class="link" href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
             GitHub
-          </a>
-          <a class="link" href="#projects">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-            Projets
           </a>
         </div>
       </aside>
@@ -69,10 +54,13 @@
 
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="section-head">
-        <h2 id="projects-title">Projets</h2>
-        <p class="section-note">Les plus récents sur GitHub</p>
+        <h2 id="projects-title">Projects</h2>
+        <div class="carousel-controls">
+          <button class="carousel-btn" id="prev-projects" type="button" aria-label="Previous projects">←</button>
+          <button class="carousel-btn" id="next-projects" type="button" aria-label="Next projects">→</button>
+        </div>
       </div>
-      <div class="repo-grid" id="repo-list" aria-live="polite">
+      <div class="carousel-track" id="repo-list" aria-live="polite">
         <div class="skeleton-card"></div>
         <div class="skeleton-card"></div>
         <div class="skeleton-card"></div>
@@ -81,19 +69,19 @@
 
     <section class="section" id="activity" aria-labelledby="activity-title">
       <div class="section-head">
-        <h2 id="activity-title">Activité</h2>
-        <p class="section-note">Douze derniers mois</p>
+        <h2 id="activity-title">Activity</h2>
+        <p class="section-note">Last 12 months · scroll to view</p>
       </div>
       <div class="calendar" id="calendar">
         <div class="calendar-top">
           <span class="calendar-label">Contributions</span>
-          <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Profil complet</a>
+          <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Full profile</a>
         </div>
-        <div class="calendar-body">
-          <img id="github-calendar" src="" alt="Graphe de contributions GitHub de lfurtif" loading="lazy" width="720" height="112">
+        <div class="calendar-body" id="calendar-body" tabindex="0" aria-label="Contribution graph, scroll horizontally">
+          <img id="github-calendar" src="" alt="GitHub contribution graph for lfurtif" width="720" height="112">
           <div class="calendar-fallback" hidden>
-            <p>Le graphe est indisponible pour le moment.</p>
-            <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">Voir sur GitHub</a>
+            <p>The contribution graph is unavailable right now.</p>
+            <a href="https://github.com/lfurtif" target="_blank" rel="noopener noreferrer">View on GitHub</a>
           </div>
         </div>
       </div>
@@ -102,7 +90,7 @@
 
   <footer class="footer">
     <p>© <span id="year"></span> Lfurtif</p>
-    <a href="#top">Retour en haut</a>
+    <a href="#top">Back to top</a>
   </footer>
 
   <script src="back.js"></script>

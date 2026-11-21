@@ -42,12 +42,14 @@
         field += 1.35 * q * q * q;
       }
 
+      float halo  = smoothstep(0.35, 1.05, field);
       float shape = smoothstep(0.95, 1.30, field);
       float core  = smoothstep(1.60, 2.80, field);
       float mixv  = clamp(p.y / u_res.y, 0.0, 1.0);
       vec3 ink = mix(u_a, u_b, mixv);
-      vec3 col = mix(u_bg, ink, shape * 0.7);
-      col += core * 0.05 * u_a;
+      vec3 col = mix(u_bg, ink * 0.45, halo * 0.32);
+      col = mix(col, ink, shape * 0.75);
+      col += core * 0.12 * u_a;
 
       vec2 uv = p / u_res;
       float vignette = smoothstep(1.05, 0.28, length(uv - 0.5));

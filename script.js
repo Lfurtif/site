@@ -1,8 +1,8 @@
-/* GitHub data. No innerHTML with remote content, no decoration scripts. */
+/* GitHub repos, carousel controls. No innerHTML with remote content. */
 (() => {
   const USER = 'lfurtif';
   const API = `https://api.github.com/users/${USER}`;
-  const CACHE_KEY = 'lfurtif-site-v3';
+  const CACHE_KEY = 'lfurtif-site-v4';
   const CACHE_MS = 10 * 60 * 1000;
 
   const LANG_COLORS = {
@@ -35,16 +35,9 @@
     } catch { return null; }
   }
 
-  function writeCache(data) {
-    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), ...data })); }
+  function writeCache(repos) {
+    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), repos })); }
     catch { /* sessionStorage unavailable */ }
-  }
-
-  function renderStats(user) {
-    for (const key of ['repositories', 'followers', 'following']) {
-      const el = $(`[data-stat="${key}"]`);
-      if (el && typeof user[key] === 'number') el.textContent = user[key].toLocaleString('fr-FR');
-    }
   }
 
   function repoCard(repo) {
@@ -52,13 +45,13 @@
     card.href = /^https:\/\/github\.com\//i.test(repo.html_url || '') ? repo.html_url : '#';
     card.target = '_blank';
     card.rel = 'noopener noreferrer';
-    card.setAttribute('aria-label', `Ouvrir ${repo.name} sur GitHub`);
+    card.setAttribute('aria-label', `Open ${repo.name} on GitHub`);
 
     const top = make('div', 'repo-top');
     top.append(make('span', 'repo-name', repo.name));
     if (repo.fork) top.append(make('span', 'badge', 'fork'));
     card.append(top);
-    card.append(make('p', 'repo-desc', repo.description || 'Pas encore de description'));
+    card.append(make('p', 'repo-desc', repo.description || 'No description yet'));
 
     const meta = make('div', 'repo-meta');
     if (repo.language) {
@@ -68,52 +61,78 @@
       lang.append(dot, document.createTextNode(repo.language));
       meta.append(lang);
     }
-    meta.append(make('span', '', `★ ${repo.stargazers_count || 0}`));
+    meta.append(make('span', '', `${repo.stargazers_count || 0} stars`));
     meta.append(make('span', '', `${repo.forks_count || 0} forks`));
     card.append(meta);
     return card;
   }
 
   function renderRepos(repos) {
-    const list = $('#repo-list');
-    if (!list) return;
-    list.replaceChildren();
+    const track = $('#repo-list');
+    if (!track) return;
+    track.replaceChildren();
     if (!Array.isArray(repos) || repos.length === 0) {
-      list.append(make('p', 'repo-error', 'Aucun projet public pour le moment'));
+      track.append(make('p', 'repo-error', 'No public projects yet'));
+      updateControls();
       return;
     }
-    for (const repo of repos.slice(0, 6)) list.append(repoCard(repo));
+    for (const repo of repos.slice(0, 6)) track.append(repoCard(repo));
+    updateControls();
   }
 
   function renderError(message) {
-    const list = $('#repo-list');
-    if (!list) return;
-    list.replaceChildren();
+    const track = $('#repo-list');
+    if (!track) return;
+    track.replaceChildren();
     const box = make('div', 'repo-error', message);
-    const retry = make('button', '', 'Réessayer');
+    const retry = make('button', '', 'Retry');
     retry.type = 'button';
     retry.addEventListener('click', load);
     box.append(retry);
-    list.append(box);
+    track.append(box);
+    updateControls();
+  }
+
+  function step() {
+    const track = $('#repo-list');
+    const card = track && track.querySelector('.repo-card, .skeleton-card');
+    if (!card) return 280;
+    const gap = parseFloat(getComputedStyle(track).gap) || 16;
+    return card.getBoundingClientRect().width + gap;
+  }
+
+  function updateControls() {
+    const track = $('#repo-list');
+    const prev = $('#prev-projects');
+    const next = $('#next-projects');
+    if (!track || !prev || !next) return;
+    const max = Math.max(0, track.scrollWidth - track.clientWidth - 2);
+    prev.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= max;
+  }
+
+  function setupCarousel() {
+    const track = $('#repo-list');
+    const prev = $('#prev-projects');
+    const next = $('#next-projects');
+    if (!track || !prev || !next) return;
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', updateControls, { passive: true });
+    addEventListener('resize', updateControls, { passive: true });
+    updateControls();
   }
 
   async function load() {
     const cached = readCache();
-    if (cached) {
-      renderStats(cached.user || {});
-      if (cached.repos) renderRepos(cached.repos);
-    }
+    if (cached && cached.repos) renderRepos(cached.repos);
     try {
-      const [user, repos] = await Promise.all([
-        getJSON(API),
-        getJSON(`${API}/repos?sort=updated&per_page=6`),
-      ]);
-      renderStats(user);
+      const repos = await getJSON(`${API}/repos?sort=updated&per_page=6`);
       renderRepos(repos);
-      writeCache({ user, repos });
+      writeCache(repos);
     } catch (err) {
       console.warn(err);
-      if (!cached) renderError('Impossible de charger les projets depuis GitHub');
+      if (!cached) renderError('Could not load projects from GitHub');
     }
   }
 
@@ -129,6 +148,7 @@
   }
 
   $('#year').textContent = new Date().getFullYear();
+  setupCarousel();
   setupCalendar();
   load();
 })();
