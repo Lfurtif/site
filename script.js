@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SPEED = 0.035;          // pixels per millisecond, ~35 px/s
     const RAMP_MS = 1200;         // ease back to cruising speed after a drag
+    const MAX_FLICK = 0.35;       // cap on the momentum carried by a release
 
     let setWidth = 0;
     let allRepos = [];
@@ -22,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let startOffset = 0;
     let resumeStart = -Infinity;
+    let releaseSpeed = 0;
+    let dragSpeed = 0;
+    let lastMoveX = 0;
+    let lastMoveTime = 0;
     let lastTime = 0;
 
     function makeCard(repo) {
@@ -80,13 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActive();
     }
 
-    // Ease the autoplay back in instead of freezing then snapping to full speed.
+    // Start from the speed the drag was released with, then ease to cruising
+    // speed: a fast flick slows down, a slow or backward flick speeds up.
     function currentSpeed(time) {
         if (dragging) return 0;
         const t = time - resumeStart;
         if (t >= RAMP_MS) return SPEED;
         const p = Math.max(0, t) / RAMP_MS;
-        return SPEED * (1 - Math.pow(1 - p, 3));
+        return releaseSpeed + (SPEED - releaseSpeed) * (1 - Math.pow(1 - p, 3));
     }
 
     function tick(time) {
@@ -105,6 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
         moved = false;
         startX = event.clientX;
         startOffset = offset;
+        dragSpeed = 0;
+        lastMoveX = event.clientX;
+        lastMoveTime = performance.now();
         viewport.classList.add('dragging');
         try { viewport.setPointerCapture(event.pointerId); }
         catch { /* synthetic or already-released pointer: drag still works */ }
@@ -112,6 +121,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     viewport.addEventListener('pointermove', (event) => {
         if (!dragging) return;
+        const now = performance.now();
+        const elapsed = now - lastMoveTime;
+        if (elapsed > 0) {
+            // Offset moves opposite to the pointer; smooth the samples so a
+            // single jittery event cannot dictate the release momentum.
+            const instant = -(event.clientX - lastMoveX) / elapsed;
+            dragSpeed = dragSpeed * 0.6 + instant * 0.4;
+            lastMoveX = event.clientX;
+            lastMoveTime = now;
+        }
         const dx = event.clientX - startX;
         if (Math.abs(dx) > 4) moved = true;
         offset = startOffset - dx;
@@ -123,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
         dragging = false;
         viewport.classList.remove('dragging');
         if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+        // A hold without movement carries no momentum.
+        const idle = performance.now() - lastMoveTime;
+        releaseSpeed = idle > 120 ? 0 : Math.max(-MAX_FLICK, Math.min(MAX_FLICK, dragSpeed));
         resumeStart = performance.now();
     }
     viewport.addEventListener('pointerup', endDrag);
