@@ -51,13 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Highlight the card whose centre is nearest the viewport centre, not the
-    // one under the cursor: the highlight then follows the motion, not the mouse.
+    // one under the cursor. A small hysteresis stops two equidistant cards from
+    // swapping the highlight back and forth (the occasional flash).
+    const SWITCH_MARGIN = 10;
     function updateActive() {
         if (!cardWidth || !track.children.length) return;
         const centre = offset + viewport.clientWidth / 2;
-        const index = Math.max(0, Math.min(track.children.length - 1,
-            Math.floor((centre - cardWidth / 2) / (cardWidth + cardGap) + 0.5)));
+        const step = cardWidth + cardGap;
+        const count = track.children.length;
+        const index = Math.max(0, Math.min(count - 1,
+            Math.floor((centre - cardWidth / 2) / step + 0.5)));
         if (index === activeIndex) return;
+        if (activeIndex >= 0 && activeIndex < count) {
+            const currentGap = Math.abs(activeIndex * step + cardWidth / 2 - centre);
+            const nextGap = Math.abs(index * step + cardWidth / 2 - centre);
+            if (currentGap - nextGap < SWITCH_MARGIN) return;
+        }
         if (activeIndex >= 0) track.children[activeIndex]?.classList.remove('active');
         track.children[index].classList.add('active');
         activeIndex = index;
