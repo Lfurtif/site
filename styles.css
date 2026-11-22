@@ -45,7 +45,6 @@ body {
     padding: 24px;
 }
 
-/* Grid 1 — about: narrow identity card, wide focus list. */
 .about-grid {
     display: grid;
     grid-template-columns: 320px minmax(0, 1fr);
@@ -115,7 +114,6 @@ body {
 .focus b { flex: 0 0 132px; font-weight: 500; }
 .focus span { color: var(--muted); font-size: 0.88rem; }
 
-/* Grid 2 — projects: compact header above a clipped horizontal track. */
 .repos-grid {
     display: grid;
     grid-template-areas: "head" "track";
@@ -194,7 +192,6 @@ body {
 }
 .repo-empty { margin: 0; font-size: 0.9rem; color: var(--muted); }
 
-/* Calendar keeps the full width so the graph stays readable. */
 .socials { min-width: 0; }
 .socials-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .socials-head h3 { margin: 0; }
@@ -216,7 +213,6 @@ body {
     pointer-events: none;
 }
 
-/* Rendered at half resolution by back.js, stretched to cover the viewport. */
 #blob-canvas {
     position: fixed;
     top: 0;
