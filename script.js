@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const track = document.getElementById('repo-list');
     if (!viewport || !track) return;
 
-    const SPEED = 0.035;          // pixels per millisecond, ~35 px/s
-    const RAMP_MS = 1200;         // ease back to cruising speed after a drag
-    const MAX_FLICK = 0.35;       // cap on the momentum carried by a release
+    const SPEED = 0.035;          // Auto speed
+    const RAMP_MS = 1200;         // Time to go back to auto speed
+    const MAX_FLICK = 0.80;       // Max momentum kept in a release
 
     let setWidth = 0;
     let allRepos = [];
@@ -50,9 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(${-offset}px)`;
     }
 
-    // Highlight the card whose centre is nearest the viewport centre, not the
-    // one under the cursor. A small hysteresis stops two equidistant cards from
-    // swapping the highlight back and forth (the occasional flash).
+    // Highlights the repo that is closer to the center of the card
     const SWITCH_MARGIN = 10;
     function updateActive() {
         if (!cardWidth || !track.children.length) return;
@@ -73,11 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fill(repos) {
-        // One set defines the loop length. Clone it until the track is wider
-        // than the viewport plus one set, so the wrap is never visible.
         allRepos = repos;
-        // With only one or two public repos, wide cards read as a featured
-        // carousel instead of a row of identical small cards.
         track.classList.toggle('few', repos.length < 3);
         const gap = parseFloat(getComputedStyle(track).gap) || 15;
         repos.forEach(repo => track.appendChild(makeCard(repo)));
@@ -94,8 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActive();
     }
 
-    // Start from the speed the drag was released with, then ease to cruising
-    // speed: a fast flick slows down, a slow or backward flick speeds up.
     function currentSpeed(time) {
         if (dragging) return 0;
         const t = time - resumeStart;
@@ -151,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dragging = false;
         viewport.classList.remove('dragging');
         if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
-        // A hold without movement carries no momentum.
+        // Holding without moving stops the carrousel
         const idle = performance.now() - lastMoveTime;
         releaseSpeed = idle > 120 ? 0 : Math.max(-MAX_FLICK, Math.min(MAX_FLICK, dragSpeed));
         resumeStart = performance.now();
@@ -159,13 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
     viewport.addEventListener('pointerup', endDrag);
     viewport.addEventListener('pointercancel', endDrag);
 
-    // A hold-and-drag must not open the repo link when released.
+    // A hold and drag doesn't open the repo
     viewport.addEventListener('click', (event) => {
         if (moved) { event.preventDefault(); event.stopPropagation(); moved = false; }
     }, true);
     viewport.addEventListener('dragstart', (event) => event.preventDefault());
 
-    // Re-evaluate the number of copies if the viewport grows a lot (rotation).
+    
     addEventListener('resize', () => {
         if (!setWidth || !allRepos.length) return;
         let guard = 0;
