@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let setWidth = 0;
     let allRepos = [];
+    let cardWidth = 0;
+    let cardGap = 15;
+    let activeIndex = -1;
     let offset = 0;
     let dragging = false;
     let moved = false;
@@ -42,6 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(${-offset}px)`;
     }
 
+    // Highlight the card whose centre is nearest the viewport centre, not the
+    // one under the cursor: the highlight then follows the motion, not the mouse.
+    function updateActive() {
+        if (!cardWidth || !track.children.length) return;
+        const centre = offset + viewport.clientWidth / 2;
+        const index = Math.max(0, Math.min(track.children.length - 1,
+            Math.floor((centre - cardWidth / 2) / (cardWidth + cardGap) + 0.5)));
+        if (index === activeIndex) return;
+        if (activeIndex >= 0) track.children[activeIndex]?.classList.remove('active');
+        track.children[index].classList.add('active');
+        activeIndex = index;
+    }
+
     function fill(repos) {
         // One set defines the loop length. Clone it until the track is wider
         // than the viewport plus one set, so the wrap is never visible.
@@ -51,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
         track.classList.toggle('few', repos.length < 3);
         const gap = parseFloat(getComputedStyle(track).gap) || 15;
         repos.forEach(repo => track.appendChild(makeCard(repo)));
+        cardGap = gap;
+        cardWidth = track.firstElementChild.getBoundingClientRect().width;
         setWidth = track.scrollWidth + gap;
 
         let guard = 0;
@@ -59,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             guard++;
         }
         normalize();
+        updateActive();
     }
 
     function tick(time) {
@@ -67,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastTime = time;
         if (!dragging && time >= resumeAt && setWidth > 0) offset += SPEED * dt;
         normalize();
+        updateActive();
         requestAnimationFrame(tick);
     }
 
@@ -113,6 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
             allRepos.forEach(repo => track.appendChild(makeCard(repo)));
             guard++;
         }
+        cardGap = parseFloat(getComputedStyle(track).gap) || 15;
+        cardWidth = track.firstElementChild.getBoundingClientRect().width;
+        updateActive();
     }, { passive: true });
 
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`)

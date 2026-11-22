@@ -169,9 +169,9 @@ body {
     flex-basis: min(340px, 76vw);
     width: min(340px, 76vw);
 }
-.repo-item:hover {
-    background: rgba(var(--accent-rgb), 0.08);
-    border-color: rgba(var(--accent-rgb), 0.4);
+.repo-item.active {
+    background: rgba(var(--accent-rgb), 0.1);
+    border-color: rgba(var(--accent-rgb), 0.55);
 }
 .repo-item h4 {
     margin: 0 0 6px 0;
