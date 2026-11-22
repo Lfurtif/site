@@ -1,8 +1,6 @@
 const canvas = document.getElementById('blob-canvas');
 let width, height, viewW, viewH;
 const gl = canvas.getContext('webgl');
-// The lava is soft by nature: half-resolution costs 4x fewer fragments and
-// the browser's upscale smooths the edges for free.
 const RENDER_SCALE = 0.5;
 const MAX_BLOBS = 40, BLOB_SPEED = 0.7, STICKINESS = 0.7;
 const COLOR1 = [0.66, 0.45, 1.0], COLOR2 = [0.36, 0.20, 0.72], BG_COLOR = [0.02, 0.02, 0.02];
@@ -10,8 +8,7 @@ let blobs = [], numBlobs = 0;
 const blobData = new Float32Array(MAX_BLOBS * 3);
 let blobsHandle, color1Handle, color2Handle, bgColorHandle, heightHandle, countHandle, program;
 
-// Density follows the visible area: a desktop keeps the original 40 blobs,
-// a phone gets fewer and smaller ones so the background stays readable.
+// Change amount of blobs if screen is too tiny
 function metrics() {
     const area = Math.max(1, viewW * viewH);
     const count = Math.max(10, Math.min(MAX_BLOBS, Math.round(area / 22000)));
