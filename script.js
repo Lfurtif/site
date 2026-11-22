@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!viewport || !track) return;
 
     const SPEED = 0.035;          // pixels per millisecond, ~35 px/s
-    const RESUME_DELAY = 1200;    // pause after a drag before autoplay resumes
+    const RAMP_MS = 1200;         // ease back to cruising speed after a drag
 
     let setWidth = 0;
     let allRepos = [];
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let moved = false;
     let startX = 0;
     let startOffset = 0;
-    let resumeAt = 0;
+    let resumeStart = -Infinity;
     let lastTime = 0;
 
     function makeCard(repo) {
@@ -80,11 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActive();
     }
 
+    // Ease the autoplay back in instead of freezing then snapping to full speed.
+    function currentSpeed(time) {
+        if (dragging) return 0;
+        const t = time - resumeStart;
+        if (t >= RAMP_MS) return SPEED;
+        const p = Math.max(0, t) / RAMP_MS;
+        return SPEED * (1 - Math.pow(1 - p, 3));
+    }
+
     function tick(time) {
         if (!lastTime) lastTime = time;
         const dt = Math.min(64, time - lastTime);
         lastTime = time;
-        if (!dragging && time >= resumeAt && setWidth > 0) offset += SPEED * dt;
+        if (setWidth > 0) offset += currentSpeed(time) * dt;
         normalize();
         updateActive();
         requestAnimationFrame(tick);
@@ -114,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dragging = false;
         viewport.classList.remove('dragging');
         if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
-        resumeAt = performance.now() + RESUME_DELAY;
+        resumeStart = performance.now();
     }
     viewport.addEventListener('pointerup', endDrag);
     viewport.addEventListener('pointercancel', endDrag);
